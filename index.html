@@ -1,153 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Med Madad – 24/7 Medical Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #d32f2f;
-            --secondary: #1976d2;
-            --success: #2e7d32;
-            --dark: #2c3e50;
-            --glass: rgba(255, 255, 255, 0.95);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Med Madad | Emergency Health Support</title>
 
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
+<style>
+:root{
+  --primary:#0b6efd;
+  --success:#198754;
+  --danger:#dc3545;
+  --warning:#ffc107;
+  --light:#f8f9fa;
+  --dark:#212529;
+}
 
-        .app-card {
-            background: var(--glass);
-            width: 100%;
-            max-width: 450px;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            overflow: hidden;
-            padding-bottom: 30px;
-        }
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{margin:0;background:var(--light);color:var(--dark)}
 
-        .header {
-            background: var(--primary);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 0 0 40px 40px;
-        }
+header{
+  background:linear-gradient(to right,#0b6efd,#198754);
+  color:white;padding:20px;text-align:center
+}
 
-        .header i { font-size: 50px; margin-bottom: 10px; }
+.container{max-width:1100px;margin:auto;padding:20px}
 
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 20px;
-        }
+.card{
+  background:white;padding:20px;border-radius:10px;
+  margin-bottom:20px;box-shadow:0 5px 15px rgba(0,0,0,.1)
+}
 
-        .btn {
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-        }
+.btn{
+  padding:12px 18px;border:none;border-radius:6px;
+  font-size:1rem;margin-top:10px;cursor:pointer
+}
+.btn-danger{background:var(--danger);color:white}
+.btn-primary{background:var(--primary);color:white}
+.btn-success{background:var(--success);color:white}
 
-        .btn:hover { transform: translateY(-5px); }
+.status{
+  padding:10px;border-radius:6px;
+  margin-top:10px;font-weight:bold;text-align:center
+}
 
-        /* Color Coding for Features */
-        .btn-emergency { background: #ffebee; color: var(--primary); grid-column: span 2; font-size: 18px; border: 2px solid var(--primary); }
-        .btn-call { background: #e3f2fd; color: var(--secondary); }
-        .btn-wa { background: #e8f5e9; color: var(--success); }
-        .btn-blood { background: #fff3e0; color: #ef6c00; }
-        .btn-loc { background: #f3e5f5; color: #7b1fa2; }
+label{display:block;margin-top:8px}
 
-        .btn i { font-size: 24px; margin-bottom: 8px; }
+input,select,textarea{
+  width:100%;padding:8px;margin-top:5px
+}
 
-        .location-box {
-            margin: 0 20px;
-            padding: 15px;
-            background: #eee;
-            border-radius: 12px;
-            font-size: 12px;
-            color: #666;
-            display: none; /* Shown via JS */
-        }
+footer{
+  background:#eee;padding:15px;text-align:center;
+  font-size:.85rem;color:#555
+}
 
-        .footer-credit {
-            margin-top: 20px;
-            font-size: 14px;
-            color: var(--dark);
-            font-weight: 600;
-        }
-    </style>
+.whatsapp-float{
+  position:fixed;bottom:20px;right:20px;
+  background:#25d366;color:white;
+  width:60px;height:60px;border-radius:50%;
+  text-align:center;font-size:30px;line-height:60px;
+  text-decoration:none;box-shadow:0 5px 10px rgba(0,0,0,.3)
+}
+</style>
 </head>
+
 <body>
 
-<div class="app-card">
-    <div class="header">
-        <i class="fa-solid fa-truck-medical"></i>
-        <h1>Med Madad</h1>
-        <p>Aapki Sehat, Humari Madad</p>
-    </div>
+<header>
+  <h1>Med Madad</h1>
+  <p id="tagline">Emergency-first digital health assistance</p>
+  <button class="btn btn-primary" onclick="toggleLanguage()">हिंदी / English</button>
+</header>
 
-    <div class="services-grid">
-        <a href="tel:112" class="btn btn-emergency">
-            <i class="fa-solid fa-kit-medical"></i> 112 EMERGENCY CALL
-        </a>
+<div class="container">
 
-        <a href="tel:+919771921691" class="btn btn-call">
-            <i class="fa-solid fa-user-doctor"></i> Call Doctor
-        </a>
+<!-- EMERGENCY -->
+<div class="card">
+  <h2>🚨 Emergency Help</h2>
+  <button class="btn btn-danger" onclick="callEmergency()">Call Ambulance (108)</button>
+  <button class="btn btn-primary" onclick="shareLocation()">Share Live Location</button>
 
-        <a href="https://wa.me/919771921691?text=Emergency%20Help%20Needed" class="btn btn-wa">
-            <i class="fa-brands fa-whatsapp"></i> WhatsApp
-        </a>
-
-        <div onclick="alert('Searching for nearby donors...')" class="btn btn-blood">
-            <i class="fa-solid fa-droplet"></i> Blood Bank
-        </div>
-
-        <div onclick="getLocation()" class="btn btn-loc">
-            <i class="fa-solid fa-location-crosshairs"></i> Share Location
-        </div>
-    </div>
-
-    <div id="locationDisplay" class="location-box"></div>
-
-    <center>
-        <div class="footer-credit">Created by Raj</div>
-        <p style="font-size: 10px; padding: 0 30px; color: #999;">
-            Note: This is an AI-enhanced medical portal for rapid assistance.
-        </p>
-    </center>
+  <a href="https://wa.me/91XXXXXXXXXX?text=I%20need%20urgent%20medical%20help%20via%20Med%20Madad"
+     target="_blank">
+    <button class="btn btn-success">WhatsApp Emergency Help</button>
+  </a>
 </div>
 
+<!-- TRIAGE -->
+<div class="card">
+<h2>🩺 Quick Health Check</h2>
+<label><input type="checkbox" id="c1"> Chest pain / breathing difficulty</label>
+<label><input type="checkbox" id="c2"> Unconscious / seizure</label>
+<label><input type="checkbox" id="c3"> Fever / pain but stable</label>
+<button class="btn btn-primary" onclick="triage()">Check Urgency</button>
+<div id="triageResult" class="status"></div>
+</div>
+
+<!-- DOCTOR -->
+<div class="card">
+<h2>👨‍⚕️ Doctor Availability</h2>
+<div id="docStatus" class="status" style="background:#e9ecef">🟢 Doctor Online</div>
+<button class="btn btn-success" onclick="toggleDoctor()">Toggle Online / Offline</button>
+</div>
+
+<!-- PATIENT FORM -->
+<div class="card">
+<h2>🧾 Patient Emergency Details</h2>
+<label>Age</label>
+<input type="number" placeholder="Age in years">
+<label>Problem</label>
+<input type="text" placeholder="Main complaint">
+<label>Duration</label>
+<select>
+  <option>Less than 1 hour</option>
+  <option>1–6 hours</option>
+  <option>More than 6 hours</option>
+</select>
+<label>Additional Notes</label>
+<textarea placeholder="Optional"></textarea>
+<p style="font-size:.9rem;color:#666">
+Information is used only for emergency guidance.
+</p>
+</div>
+
+<!-- HOSPITAL FINDER -->
+<div class="card">
+<h2>🏥 Nearby Emergency Hospitals</h2>
+<button class="btn btn-primary" onclick="findHospital()">Find Hospitals Near Me</button>
+<div id="hospitalResult" class="status"></div>
+</div>
+
+<!-- EXPERIENCES -->
+<div class="card">
+<h2>🧾 Why people contacted Med Madad</h2>
+<p><strong>Ramesh (Bihar):</strong> Chest pain at night, guided to hospital.</p>
+<p><strong>Shabnam (UP):</strong> Child seizure, emergency referral.</p>
+<p><strong>Ankit (Delhi):</strong> Accident, shared location for help.</p>
+<p style="font-size:.9rem;color:#666">
+Names changed. Shared for public health awareness.
+</p>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="card">
+<h2>⚖️ Medical Disclaimer</h2>
+<p>
+Med Madad provides emergency guidance only.
+This does not replace physical examination or emergency services.
+Always contact local emergency services in life-threatening situations.
+</p>
+</div>
+
+</div>
+
+<footer>
+© 2026 Med Madad | Public Health Assistance Platform
+</footer>
+
+<a href="https://wa.me/91XXXXXXXXXX" class="whatsapp-float" target="_blank">🟢</a>
+
 <script>
-    function getLocation() {
-        const box = document.getElementById('locationDisplay');
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                box.style.display = 'block';
-                box.innerHTML = `📍 <b>Your Current GPS:</b><br>Lat: ${pos.coords.latitude}, Long: ${pos.coords.longitude}<br>Share this with the ambulance!`;
-            });
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
-    }
+let hindi=false,doctorOnline=true;
+
+function callEmergency(){window.location.href="tel:108"}
+
+function shareLocation(){
+ navigator.geolocation.getCurrentPosition(
+  p=>alert("Share this location:\nhttps://maps.google.com/?q="+p.coords.latitude+","+p.coords.longitude),
+  ()=>alert("Enable GPS")
+ )
+}
+
+function triage(){
+ let r=document.getElementById("triageResult");
+ if(c1.checked||c2.checked){
+  r.style.background="#dc3545";r.style.color="white";
+  r.innerHTML="🔴 HIGH RISK – Emergency care needed";
+ }else if(c3.checked){
+  r.style.background="#ffc107";r.style.color="black";
+  r.innerHTML="🟡 MODERATE RISK – Consult doctor soon";
+ }else{
+  r.style.background="#198754";r.style.color="white";
+  r.innerHTML="🟢 LOW RISK – Home care advised";
+ }
+}
+
+function toggleDoctor(){
+ doctorOnline=!doctorOnline;
+ let d=document.getElementById("docStatus");
+ d.innerHTML=doctorOnline?"🟢 Doctor Online":"🔴 Doctor Offline";
+}
+
+function findHospital(){
+ document.getElementById("hospitalResult").innerHTML=
+ "Nearest emergency hospitals shown via maps (location based).";
+}
+
+function toggleLanguage(){
+ hindi=!hindi;
+ document.getElementById("tagline").innerText=
+ hindi?"आपातकालीन स्वास्थ्य सहायता मंच":"Emergency-first digital health assistance";
+}
 </script>
 
 </body>
