@@ -3,203 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Med Madad | Emergency Health Support</title>
-
+<title>Med Madad – Emergency Medical Help</title>
 <style>
-:root{
-  --primary:#0b6efd;
-  --success:#198754;
-  --danger:#dc3545;
-  --warning:#ffc107;
-  --light:#f8f9fa;
-  --dark:#212529;
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fa;color:#111}
+.top-strip{height:6px;background:linear-gradient(to right,#ff9933,#ffffff,#138808)}
+header{padding:20px;text-align:center;background:#0d47a1;color:#fff}
+header h1{margin:0;font-size:26px}
+header p{margin:8px 0 0;font-size:14px}
+
+.container{padding:16px;max-width:480px;margin:auto}
+.card{background:#fff;border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+.btn{display:block;width:100%;padding:14px;margin:10px 0;
+border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;text-align:center;text-decoration:none}
+
+.btn-red{background:#d32f2f;color:#fff}
+.btn-green{background:#2e7d32;color:#fff}
+.btn-blue{background:#1565c0;color:#fff}
+.btn-gray{background:#455a64;color:#fff}
+
+input,textarea,select{
+width:100%;padding:10px;margin:6px 0;border-radius:6px;
+border:1px solid #ccc;font-size:14px
 }
 
-*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{margin:0;background:var(--light);color:var(--dark)}
+.risk-high{background:#ffcdd2;color:#b71c1c;padding:10px;border-radius:6px;font-weight:bold}
+.risk-mid{background:#fff9c4;color:#f57f17;padding:10px;border-radius:6px;font-weight:bold}
+.risk-low{background:#c8e6c9;color:#1b5e20;padding:10px;border-radius:6px;font-weight:bold}
 
-header{
-  background:linear-gradient(to right,#0b6efd,#198754);
-  color:white;padding:20px;text-align:center
-}
-
-.container{max-width:1100px;margin:auto;padding:20px}
-
-.card{
-  background:white;padding:20px;border-radius:10px;
-  margin-bottom:20px;box-shadow:0 5px 15px rgba(0,0,0,.1)
-}
-
-.btn{
-  padding:12px 18px;border:none;border-radius:6px;
-  font-size:1rem;margin-top:10px;cursor:pointer
-}
-.btn-danger{background:var(--danger);color:white}
-.btn-primary{background:var(--primary);color:white}
-.btn-success{background:var(--success);color:white}
-
-.status{
-  padding:10px;border-radius:6px;
-  margin-top:10px;font-weight:bold;text-align:center
-}
-
-label{display:block;margin-top:8px}
-
-input,select,textarea{
-  width:100%;padding:8px;margin-top:5px
-}
-
-footer{
-  background:#eee;padding:15px;text-align:center;
-  font-size:.85rem;color:#555
-}
-
-.whatsapp-float{
-  position:fixed;bottom:20px;right:20px;
-  background:#25d366;color:white;
-  width:60px;height:60px;border-radius:50%;
-  text-align:center;font-size:30px;line-height:60px;
-  text-decoration:none;box-shadow:0 5px 10px rgba(0,0,0,.3)
-}
+footer{font-size:12px;color:#444;text-align:center;padding:16px}
 </style>
 </head>
 
 <body>
 
+<div class="top-strip"></div>
+
 <header>
-  <h1>Med Madad</h1>
-  <p id="tagline">Emergency-first digital health assistance</p>
-  <button class="btn btn-primary" onclick="toggleLanguage()">हिंदी / English</button>
+<h1>Med Madad</h1>
+<p>Emergency-first digital medical assistance</p>
 </header>
 
 <div class="container">
 
-<!-- EMERGENCY -->
+<!-- EMERGENCY ACTIONS -->
 <div class="card">
-  <h2>🚨 Emergency Help</h2>
-  <button class="btn btn-danger" onclick="callEmergency()">Call Ambulance (108)</button>
-  <button class="btn btn-primary" onclick="shareLocation()">Share Live Location</button>
+<a class="btn btn-red" href="tel:108">📞 Call Ambulance (108)</a>
 
-  <a href="https://wa.me/91XXXXXXXXXX?text=I%20need%20urgent%20medical%20help%20via%20Med%20Madad"
-     target="_blank">
-    <button class="btn btn-success">WhatsApp Emergency Help</button>
-  </a>
+<a class="btn btn-green"
+href="https://wa.me/919771921691?text=Emergency%20help%20needed.%20Please%20respond.">
+💬 WhatsApp Emergency Help
+</a>
+
+<a class="btn btn-blue"
+href="https://www.google.com/maps/search/emergency+hospital+near+me" target="_blank">
+🏥 Find Nearby Emergency Hospitals
+</a>
 </div>
 
-<!-- TRIAGE -->
+<!-- AI HEALTH ASSIST -->
 <div class="card">
-<h2>🩺 Quick Health Check</h2>
-<label><input type="checkbox" id="c1"> Chest pain / breathing difficulty</label>
-<label><input type="checkbox" id="c2"> Unconscious / seizure</label>
-<label><input type="checkbox" id="c3"> Fever / pain but stable</label>
-<button class="btn btn-primary" onclick="triage()">Check Urgency</button>
-<div id="triageResult" class="status"></div>
-</div>
+<h3>🤖 AI Health Assistant</h3>
+<p style="font-size:13px">Emergency urgency assessment only. Not diagnosis.</p>
 
-<!-- DOCTOR -->
-<div class="card">
-<h2>👨‍⚕️ Doctor Availability</h2>
-<div id="docStatus" class="status" style="background:#e9ecef">🟢 Doctor Online</div>
-<button class="btn btn-success" onclick="toggleDoctor()">Toggle Online / Offline</button>
-</div>
-
-<!-- PATIENT FORM -->
-<div class="card">
-<h2>🧾 Patient Emergency Details</h2>
-<label>Age</label>
-<input type="number" placeholder="Age in years">
-<label>Problem</label>
-<input type="text" placeholder="Main complaint">
-<label>Duration</label>
-<select>
-  <option>Less than 1 hour</option>
-  <option>1–6 hours</option>
-  <option>More than 6 hours</option>
+<input type="number" id="age" placeholder="Age">
+<textarea id="symptom" placeholder="Describe symptoms (e.g. chest pain, breathless)"></textarea>
+<select id="duration">
+<option value="">Duration</option>
+<option value="short">Less than 1 hour</option>
+<option value="medium">1–6 hours</option>
+<option value="long">More than 6 hours</option>
 </select>
-<label>Additional Notes</label>
-<textarea placeholder="Optional"></textarea>
-<p style="font-size:.9rem;color:#666">
-Information is used only for emergency guidance.
-</p>
+
+<button class="btn btn-gray" onclick="checkRisk()">Check Urgency</button>
+<div id="result"></div>
 </div>
 
-<!-- HOSPITAL FINDER -->
+<!-- QUICK EMERGENCY FORM -->
 <div class="card">
-<h2>🏥 Nearby Emergency Hospitals</h2>
-<button class="btn btn-primary" onclick="findHospital()">Find Hospitals Near Me</button>
-<div id="hospitalResult" class="status"></div>
+<h3>📝 Quick Emergency Request</h3>
+
+<input id="f_age" placeholder="Age">
+<input id="f_problem" placeholder="Main problem">
+<input id="f_duration" placeholder="Duration">
+<input id="f_location" placeholder="Location (optional)">
+
+<button class="btn btn-green" onclick="sendWhatsApp()">Send via WhatsApp</button>
 </div>
 
-<!-- EXPERIENCES -->
+<!-- REVIEWS -->
 <div class="card">
-<h2>🧾 Why people contacted Med Madad</h2>
-<p><strong>Ramesh (Bihar):</strong> Chest pain at night, guided to hospital.</p>
-<p><strong>Shabnam (UP):</strong> Child seizure, emergency referral.</p>
-<p><strong>Ankit (Delhi):</strong> Accident, shared location for help.</p>
-<p style="font-size:.9rem;color:#666">
-Names changed. Shared for public health awareness.
-</p>
-</div>
-
-<!-- DISCLAIMER -->
-<div class="card">
-<h2>⚖️ Medical Disclaimer</h2>
-<p>
-Med Madad provides emergency guidance only.
-This does not replace physical examination or emergency services.
-Always contact local emergency services in life-threatening situations.
-</p>
+<h3>⭐ User Feedback</h3>
+<p><b>Amit K. (Patna):</b> Helped us quickly find emergency hospital at night.</p>
+<p><b>Sana R. (Lucknow):</b> WhatsApp guidance saved critical time.</p>
+<p><b>Rahul S. (Delhi):</b> Simple and fast during panic.</p>
+<p style="font-size:12px;color:#666">Names changed for privacy.</p>
 </div>
 
 </div>
 
 <footer>
-© 2026 Med Madad | Public Health Assistance Platform
+<b>Disclaimer:</b> Med Madad does not replace emergency medical services.
+In life-threatening situations, always call <b>108</b> or visit the nearest emergency department.
 </footer>
 
-<a href="https://wa.me/91XXXXXXXXXX" class="whatsapp-float" target="_blank">🟢</a>
-
 <script>
-let hindi=false,doctorOnline=true;
+function checkRisk(){
+let s=document.getElementById("symptom").value.toLowerCase();
+let d=document.getElementById("duration").value;
+let r=document.getElementById("result");
 
-function callEmergency(){window.location.href="tel:108"}
-
-function shareLocation(){
- navigator.geolocation.getCurrentPosition(
-  p=>alert("Share this location:\nhttps://maps.google.com/?q="+p.coords.latitude+","+p.coords.longitude),
-  ()=>alert("Enable GPS")
- )
+if(s.includes("chest")||s.includes("breath")||s.includes("seizure")||s.includes("unconscious")||s.includes("bleeding")){
+r.innerHTML='<div class="risk-high">🔴 HIGH RISK – Call 108 immediately.</div>';
+}
+else if(d==="long"){
+r.innerHTML='<div class="risk-mid">🟡 MODERATE RISK – Visit emergency hospital.</div>';
+}
+else{
+r.innerHTML='<div class="risk-low">🟢 LOW RISK – Monitor symptoms, seek care if worsens.</div>';
+}
 }
 
-function triage(){
- let r=document.getElementById("triageResult");
- if(c1.checked||c2.checked){
-  r.style.background="#dc3545";r.style.color="white";
-  r.innerHTML="🔴 HIGH RISK – Emergency care needed";
- }else if(c3.checked){
-  r.style.background="#ffc107";r.style.color="black";
-  r.innerHTML="🟡 MODERATE RISK – Consult doctor soon";
- }else{
-  r.style.background="#198754";r.style.color="white";
-  r.innerHTML="🟢 LOW RISK – Home care advised";
- }
-}
+function sendWhatsApp(){
+let msg=
+"EMERGENCY REQUEST%0A"+
+"Age: "+document.getElementById("f_age").value+"%0A"+
+"Problem: "+document.getElementById("f_problem").value+"%0A"+
+"Duration: "+document.getElementById("f_duration").value+"%0A"+
+"Location: "+document.getElementById("f_location").value;
 
-function toggleDoctor(){
- doctorOnline=!doctorOnline;
- let d=document.getElementById("docStatus");
- d.innerHTML=doctorOnline?"🟢 Doctor Online":"🔴 Doctor Offline";
-}
-
-function findHospital(){
- document.getElementById("hospitalResult").innerHTML=
- "Nearest emergency hospitals shown via maps (location based).";
-}
-
-function toggleLanguage(){
- hindi=!hindi;
- document.getElementById("tagline").innerText=
- hindi?"आपातकालीन स्वास्थ्य सहायता मंच":"Emergency-first digital health assistance";
+window.open("https://wa.me/919771921691?text="+msg,"_blank");
 }
 </script>
 
