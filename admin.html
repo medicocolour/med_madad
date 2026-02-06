@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Admin – Reset Token</h2>
+<input type="password" id="pass" placeholder="Password">
+<button onclick="reset()">Reset</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { /* same config */ };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.reset = async () => {
+  const ref = doc(db, "departments", "medicine");
+  const snap = await getDoc(ref);
+  if (document.getElementById("pass").value === snap.data().password) {
+    await updateDoc(ref, { currentToken: 0 });
+    alert("Token Reset");
+  } else {
+    alert("Wrong password");
+  }
+};
+</script>
+</body>
+</html>
