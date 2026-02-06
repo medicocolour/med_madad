@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Doctor Live Token</h2>
+<h1 id="token">0</h1>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { /* same config */ };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const ref = doc(db, "departments", "medicine");
+onSnapshot(ref, (doc) => {
+  document.getElementById("token").innerText = doc.data().currentToken;
+});
+</script>
+</body>
+</html>
