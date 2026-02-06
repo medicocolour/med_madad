@@ -1,62 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Doctor Live Token</title>
-  <style>
-    body{
-      margin:0;
-      background:linear-gradient(135deg,#0f172a,#020617);
-      font-family: Arial, sans-serif;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      height:100vh;
-    }
-    .box{
-      text-align:center;
-      background:#020617;
-      padding:50px;
-      border-radius:20px;
-      box-shadow:0 0 40px rgba(255,0,0,0.4);
-    }
-    h2{
-      font-size:32px;
-      letter-spacing:2px;
-      color:#e5e7eb;
-    }
-    #token{
-      font-size:140px;
-      color:#ff2d2d;
-      margin:30px 0;
-      text-shadow:0 0 30px red;
-    }
-    .live{
-      color:#22c55e;
-      font-size:18px;
-    }
-  </style>
+<title>Med Madad | Doctor Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  font-family:Arial;
+  background:#f0fdf4;
+  text-align:center;
+  padding-top:40px;
+}
+.panel{
+  background:white;
+  max-width:320px;
+  margin:auto;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.15);
+}
+button{
+  width:100%;
+  padding:14px;
+  background:#16a34a;
+  color:white;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  margin-top:12px;
+}
+</style>
 </head>
 
 <body>
-<div class="box">
-  <h2>🏥 MEDICINE OPD</h2>
-  <div id="token">0</div>
-  <div class="live">● LIVE TOKEN</div>
+
+<div class="panel">
+<h2>👨‍⚕️ Doctor Panel</h2>
+<p>Call next patient</p>
+
+<input type="password" id="pass" placeholder="Password">
+<button onclick="nextPatient()">Next Patient ▶</button>
+
+<p id="status"></p>
 </div>
+
+<p style="font-size:12px;margin-top:20px;">
+For authorized doctors only<br>
+Created by Raj
+</p>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = { /* same config */ };
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const ref = doc(db, "departments", "medicine");
-onSnapshot(ref, (docSnap) => {
-  document.getElementById("token").innerText = docSnap.data().currentToken;
+const app = initializeApp({
+  apiKey:"YOUR_API_KEY",
+  projectId:"medmadad-2a807"
 });
+const db = getFirestore(app);
+const ref = doc(db,"departments","gynaecology");
+
+window.nextPatient = async ()=>{
+  const snap = await getDoc(ref);
+  if(pass.value !== snap.data().password){
+    status.innerText="❌ Wrong password";
+    return;
+  }
+  await updateDoc(ref,{
+    runningToken: snap.data().runningToken + 1
+  });
+  status.innerText="✅ Next patient called";
+}
 </script>
+
 </body>
 </html>
