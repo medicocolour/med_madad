@@ -1,115 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Med Madad | Smart Hospital Queue</title>
+<meta charset="UTF-8">
+<title>Med Madad | Live Queue</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Mobile friendly -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom right, #0f4c75, #3282b8);
-            color: white;
-            text-align: center;
-        }
-
-        header {
-            padding: 30px 15px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 36px;
-            letter-spacing: 1px;
-        }
-
-        header p {
-            margin-top: 10px;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .container {
-            padding: 30px 20px;
-        }
-
-        .card {
-            background: white;
-            color: #333;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px auto;
-            max-width: 400px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .card h2 {
-            margin-bottom: 15px;
-            color: #0f4c75;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin-top: 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .btn-patient {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-doctor {
-            background: #dc3545;
-            color: white;
-        }
-
-        footer {
-            margin-top: 40px;
-            font-size: 12px;
-            opacity: 0.8;
-        }
-    </style>
+<style>
+body{
+  margin:0;
+  font-family: 'Segoe UI', Arial;
+  background: linear-gradient(135deg,#0f766e,#14b8a6);
+  color:white;
+  text-align:center;
+}
+.header{
+  padding:30px 15px;
+}
+.logo{
+  font-size:42px;
+  font-weight:700;
+}
+.tagline{
+  font-size:16px;
+  opacity:0.9;
+}
+.card{
+  background:white;
+  color:#0f172a;
+  max-width:350px;
+  margin:40px auto;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+}
+.token-label{
+  font-size:18px;
+}
+.token{
+  font-size:96px;
+  color:#0f766e;
+  font-weight:700;
+}
+.footer{
+  font-size:12px;
+  opacity:0.8;
+  margin-top:40px;
+  padding:15px;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>MED MADAD</h1>
-    <p>Hospital queues made easy</p>
-</header>
-
-<div class="container">
-
-    <div class="card">
-        <h2>👤 Patient</h2>
-        <p>Check your current token and queue status</p>
-        <button class="btn btn-patient" onclick="location.href='patient.html'">
-            View Token
-        </button>
-    </div>
-
-    <div class="card">
-        <h2>🩺 Medico / Staff</h2>
-        <p>Secure access to update token numbers</p>
-        <button class="btn btn-doctor" onclick="location.href='doctor.html'">
-            Medico Login
-        </button>
-    </div>
-
+<div class="header">
+  <div class="logo">🏥 MED MADAD</div>
+  <div class="tagline">Smart care • Less waiting • Better health</div>
 </div>
 
-<footer>
-    © 2026 Med Madad | Smart Hospital Queue System
-</footer>
+<div class="card">
+  <div class="token-label">Now Serving Token</div>
+  <div class="token" id="token">--</div>
+</div>
+
+<div class="footer">
+  ⚠ This display is for information only.  
+  Please wait for your turn when your token is called.<br><br>
+  Created by Raj
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "YOUR_API_KEY",
+  projectId: "medmadad-2a807"
+});
+
+const db = getFirestore(app);
+const ref = doc(db,"departments","gynaecology");
+
+onSnapshot(ref,(snap)=>{
+  document.getElementById("token").innerText =
+    snap.data().runningToken;
+});
+</script>
 
 </body>
 </html>
