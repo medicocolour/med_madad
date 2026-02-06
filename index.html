@@ -1,71 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>MedMadad – Medicine Token</title>
+    <meta charset="UTF-8">
+    <title>Med Madad | Smart Hospital Queue</title>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Mobile friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-  font-family:Arial;
-  background:#f1f5f9;
-}
-.card{
-  max-width:400px;
-  margin:80px auto;
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
-  text-align:center;
-}
-button{
-  width:100%;
-  padding:16px;
-  font-size:20px;
-  background:#2563eb;
-  color:white;
-  border:none;
-  border-radius:10px;
-}
-#result{
-  margin-top:25px;
-  font-size:26px;
-  color:#16a34a;
-}
-</style>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #0f4c75, #3282b8);
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            padding: 30px 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .container {
+            padding: 30px 20px;
+        }
+
+        .card {
+            background: white;
+            color: #333;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: #0f4c75;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-patient {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-doctor {
+            background: #dc3545;
+            color: white;
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
 <body>
-<div class="card">
-  <h2>🏥 MedMadad</h2>
-  <p>Doctor ke liye token lein</p>
-  <button onclick="getToken()">🎟 GET TOKEN</button>
-  <div id="result"></div>
+
+<header>
+    <h1>MED MADAD</h1>
+    <p>Hospital queues made easy</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>👤 Patient</h2>
+        <p>Check your current token and queue status</p>
+        <button class="btn btn-patient" onclick="location.href='patient.html'">
+            View Token
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>🩺 Medico / Staff</h2>
+        <p>Secure access to update token numbers</p>
+        <button class="btn btn-doctor" onclick="location.href='doctor.html'">
+            Medico Login
+        </button>
+    </div>
+
 </div>
 
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSy....",
-  authDomain: "smarthospitalqueue.firebaseapp.com",
-  projectId: "smarthospitalqueue"
-};
+<footer>
+    © 2026 Med Madad | Smart Hospital Queue System
+</footer>
 
-firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore();
-
-function getToken(){
-  var ref = db.collection("departments").doc("medicine");
-  ref.update({
-    currentToken: firebase.firestore.FieldValue.increment(1)
-  }).then(()=>{
-    ref.get().then((doc)=>{
-      document.getElementById("result").innerHTML =
-        "Your Token: A-" + doc.data().currentToken;
-    });
-  });
-}
-</script>
 </body>
 </html>
