@@ -1,212 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Med Madad | Smart Hospital Queue</title>
+<meta charset="UTF-8">
+<title>MED MADAD | Smart Hospital Queue</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Firebase -->
+<!-- Firebase COMPAT -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-/* ---------- GLOBAL ---------- */
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #138808, #ffffff, #ff9933);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ---------- CONTAINER ---------- */
-.container {
-  background: #ffffffee;
-  max-width: 420px;
-  width: 92%;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  background: linear-gradient(135deg, #0f766e, #10b981);
+  color: #fff;
   text-align: center;
 }
 
-/* ---------- HEADER ---------- */
+header {
+  padding: 20px;
+}
+
 .logo {
-  font-size: 34px;
+  font-size: 32px;
+  font-weight: bold;
 }
-.title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #0b5f47;
-}
+
 .tagline {
-  font-size: 14px;
-  color: #444;
-  margin-bottom: 15px;
+  opacity: 0.9;
 }
 
-/* ---------- DEPARTMENT ---------- */
-select {
+.container {
+  max-width: 420px;
+  margin: auto;
+  background: #ffffff;
+  color: #064e3b;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+select, input, button {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 15px;
-}
-
-/* ---------- TOKEN BOX ---------- */
-.token-box {
-  border-radius: 14px;
-  padding: 15px;
-  margin: 12px 0;
-  color: #fff;
-}
-
-.issued { background: #2e7d32; }
-.running { background: #1565c0; }
-
-.token-title {
+  padding: 12px;
+  margin: 8px 0;
   font-size: 16px;
 }
-.token-number {
+
+.card {
+  background: #d1fae5;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 10px 0;
+}
+
+.token {
   font-size: 48px;
   font-weight: bold;
 }
 
-/* ---------- MEDICO PANEL ---------- */
-input, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-}
-
 button {
-  background: #0b5f47;
-  color: #fff;
+  background: #059669;
+  color: white;
   border: none;
-  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
 }
+
 button:hover {
-  background: #094c39;
+  background: #047857;
 }
 
-/* ---------- FOOTER ---------- */
-.footer {
+footer {
+  margin-top: 20px;
   font-size: 12px;
-  color: #555;
-  margin-top: 15px;
-}
-.warning {
-  color: #b71c1c;
-  font-size: 12px;
+  opacity: 0.9;
 }
 </style>
 </head>
 
 <body>
+
+<header>
+  <div class="logo">🏥 MED MADAD</div>
+  <div class="tagline">Smart care • Less waiting • Better health</div>
+</header>
+
 <div class="container">
 
-  <div class="logo">🏥</div>
-  <div class="title">MED MADAD</div>
-  <div class="tagline">Smart care • Less waiting • Better health</div>
-
-  <!-- Department -->
   <select id="department">
-    <option value="gynaecology">Gynaecology (Pink)</option>
-    <option value="medicine">Medicine (Green)</option>
-    <option value="orthopedic">Orthopedic (Blue)</option>
-    <option value="surgery">Surgery (Red)</option>
+    <option value="gynaecology">Gynaecology</option>
+    <option value="medicine">Medicine</option>
+    <option value="orthopedic">Orthopedic</option>
+    <option value="surgery">Surgery</option>
   </select>
 
-  <!-- Issued Token -->
-  <div class="token-box issued">
-    <div class="token-title">Issued Token</div>
-    <div class="token-number" id="issuedToken">0</div>
+  <div class="card">
+    <div>Issued Token</div>
+    <div class="token" id="issued">0</div>
   </div>
 
-  <!-- Running Token -->
-  <div class="token-box running">
-    <div class="token-title">Now Serving Token</div>
-    <div class="token-number" id="runningToken">0</div>
+  <div class="card">
+    <div>Now Serving</div>
+    <div class="token" id="running">0</div>
   </div>
 
-  <!-- Medico Control -->
-  <input type="password" id="password" placeholder="Medico password" />
-  <input type="number" id="newIssued" placeholder="Update issued token" />
-  <button onclick="updateIssued()">Update Issued Token</button>
+  <input type="password" id="password" placeholder="Doctor password">
+  <input type="number" id="newIssued" placeholder="New issued token">
+  <input type="number" id="newRunning" placeholder="New running token">
 
-  <input type="number" id="newRunning" placeholder="Update running token" />
-  <button onclick="updateRunning()">Update Running Token</button>
-
-  <div class="warning">⚠ For authorised medico staff only</div>
-
-  <div class="footer">
-    This display is for information only. Please wait for your turn. <br />
-    Created by Raj
-  </div>
+  <button onclick="updateTokens()">Update Tokens</button>
 
 </div>
 
+<footer>
+⚠️ For information only. Please wait for your turn.  
+<br>Created by Raj
+</footer>
+
 <script>
-/* 🔴 REPLACE WITH YOUR REAL FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "medmadad-2a807.firebaseapp.com",
   projectId: "medmadad-2a807",
-  storageBucket: "medmadad-2a807.appspot.com",
-  messagingSenderId: "323372425923",
-  appId: "YOUR_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const issuedEl = document.getElementById("issuedToken");
-const runningEl = document.getElementById("runningToken");
-const deptSelect = document.getElementById("department");
+let unsubscribe = null;
 
-function listenTokens() {
-  const dept = deptSelect.value;
-  db.collection("departments").doc(dept)
-    .onSnapshot(doc => {
-      if (doc.exists) {
-        issuedEl.innerText = doc.data().issuedToken;
-        runningEl.innerText = doc.data().runningToken;
-      }
-    });
+function listenDepartment() {
+  const dept = document.getElementById("department").value;
+
+  if (unsubscribe) unsubscribe();
+
+  const ref = db.collection("departments").doc(dept);
+  unsubscribe = ref.onSnapshot(doc => {
+    if (!doc.exists) return;
+    const d = doc.data();
+    document.getElementById("issued").innerText = d.issuedToken;
+    document.getElementById("running").innerText = d.runningToken;
+  });
 }
 
-deptSelect.onchange = listenTokens;
-listenTokens();
+document.getElementById("department").addEventListener("change", listenDepartment);
+listenDepartment();
 
-function updateIssued() {
-  updateToken("issuedToken", document.getElementById("newIssued").value);
-}
-function updateRunning() {
-  updateToken("runningToken", document.getElementById("newRunning").value);
-}
-
-function updateToken(field, value) {
-  const dept = deptSelect.value;
+function updateTokens() {
+  const dept = document.getElementById("department").value;
   const pass = document.getElementById("password").value;
+  const issued = Number(document.getElementById("newIssued").value);
+  const running = Number(document.getElementById("newRunning").value);
 
-  db.collection("departments").doc(dept).get().then(doc => {
-    if (doc.data().password === pass) {
-      db.collection("departments").doc(dept).update({
-        [field]: Number(value)
-      });
-    } else {
+  const ref = db.collection("departments").doc(dept);
+
+  ref.get().then(doc => {
+    if (doc.data().password !== pass) {
       alert("Wrong password");
+      return;
     }
+
+    ref.update({
+      issuedToken: issued,
+      runningToken: running
+    });
   });
 }
 </script>
+
 </body>
 </html>
