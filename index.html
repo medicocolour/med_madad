@@ -5,17 +5,22 @@
 <title>MED MADAD | Smart Hospital Queue</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Firebase COMPAT -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- 🔊 Hospital Sound -->
+<audio id="notify">
+  <source src="https://actions.google.com/sounds/v1/alarms/soft_bell.ogg" type="audio/ogg">
+</audio>
 
 <style>
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #0f766e, #10b981);
   color: #fff;
   text-align: center;
+  transition: background 0.5s;
 }
 
 header {
@@ -23,11 +28,12 @@ header {
 }
 
 .logo {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: bold;
 }
 
 .tagline {
+  font-size: 14px;
   opacity: 0.9;
 }
 
@@ -35,8 +41,8 @@ header {
   max-width: 420px;
   margin: auto;
   background: #ffffff;
-  color: #064e3b;
-  border-radius: 16px;
+  color: #111;
+  border-radius: 18px;
   padding: 20px;
 }
 
@@ -45,41 +51,42 @@ select, input, button {
   padding: 12px;
   margin: 8px 0;
   font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
 }
 
 .card {
-  background: #d1fae5;
-  border-radius: 12px;
+  background: #f1f5f9;
+  border-radius: 14px;
   padding: 16px;
-  margin: 10px 0;
+  margin: 12px 0;
 }
 
 .token {
-  font-size: 48px;
+  font-size: 46px;
   font-weight: bold;
 }
 
 button {
-  background: #059669;
+  background: #020617;
   color: white;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
 }
 
 button:hover {
-  background: #047857;
+  opacity: 0.9;
 }
 
 footer {
   margin-top: 20px;
   font-size: 12px;
-  opacity: 0.9;
+  opacity: 0.85;
 }
 </style>
 </head>
 
-<body>
+<body id="body">
 
 <header>
   <div class="logo">🏥 MED MADAD</div>
@@ -88,85 +95,125 @@ footer {
 
 <div class="container">
 
-  <select id="department">
-    <option value="gynaecology">Gynaecology</option>
-    <option value="medicine">Medicine</option>
-    <option value="orthopedic">Orthopedic</option>
-    <option value="surgery">Surgery</option>
-  </select>
+<select id="department" onchange="applyTheme(); listen();">
+  <option value="medicine">Medicine</option>
+  <option value="gynaecology">Gynaecology</option>
+  <option value="orthopedic">Orthopedic</option>
+  <option value="surgery">Surgery</option>
+  <option value="pediatrics">Pediatrics</option>
+</select>
 
-  <div class="card">
-    <div>Issued Token</div>
-    <div class="token" id="issued">0</div>
-  </div>
+<div class="card">
+  Issued Token
+  <div class="token" id="issued">0</div>
+</div>
 
-  <div class="card">
-    <div>Now Serving</div>
-    <div class="token" id="running">0</div>
-  </div>
+<div class="card">
+  Now Serving
+  <div class="token" id="running">0</div>
+</div>
 
-  <input type="password" id="password" placeholder="Doctor password">
-  <input type="number" id="newIssued" placeholder="New issued token">
-  <input type="number" id="newRunning" placeholder="New running token">
+<input type="password" id="password" placeholder="Doctor password">
+<input type="number" id="newIssued" placeholder="New issued token">
+<input type="number" id="newRunning" placeholder="New running token">
 
-  <button onclick="updateTokens()">Update Tokens</button>
+<button onclick="updateTokens()">Update Tokens</button>
 
 </div>
 
 <footer>
-⚠️ For information only. Please wait for your turn.  
-<br>Created by Raj
+⚠️ For information only. Please wait for your turn.<br>
+Created by Raj
 </footer>
 
 <script>
-const firebaseConfig = {
+/* 🔥 FIREBASE CONFIG */
+firebase.initializeApp({
   apiKey: "YOUR_API_KEY",
   authDomain: "medmadad-2a807.firebaseapp.com",
-  projectId: "medmadad-2a807",
-};
+  projectId: "medmadad-2a807"
+});
 
-firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+/* 🔐 PASSWORDS (FIXED) */
+const passwords = {
+  medicine: "1111",
+  gynaecology: "4444",
+  orthopedic: "2222",
+  surgery: "3333",
+  pediatrics: "5555"
+};
+
+/* 🎨 CALM MEDICAL COLORS */
+const themes = {
+  medicine: "#0f766e",
+  gynaecology: "#9d174d",
+  orthopedic: "#1e3a8a",
+  surgery: "#7f1d1d",
+  pediatrics: "#047857"
+};
+
+let lastRunning = 0;
 let unsubscribe = null;
 
-function listenDepartment() {
-  const dept = document.getElementById("department").value;
+/* 📅 TODAY */
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+
+/* 🎨 THEME APPLY */
+function applyTheme() {
+  const d = department.value;
+  body.style.background =
+    `linear-gradient(135deg, ${themes[d]}, #020617)`;
+}
+
+/* 📡 LIVE LISTENER + DAILY RESET */
+function listen() {
+  const d = department.value;
 
   if (unsubscribe) unsubscribe();
 
-  const ref = db.collection("departments").doc(dept);
+  const ref = db.collection("departments").doc(d);
   unsubscribe = ref.onSnapshot(doc => {
-    if (!doc.exists) return;
-    const d = doc.data();
-    document.getElementById("issued").innerText = d.issuedToken;
-    document.getElementById("running").innerText = d.runningToken;
-  });
-}
-
-document.getElementById("department").addEventListener("change", listenDepartment);
-listenDepartment();
-
-function updateTokens() {
-  const dept = document.getElementById("department").value;
-  const pass = document.getElementById("password").value;
-  const issued = Number(document.getElementById("newIssued").value);
-  const running = Number(document.getElementById("newRunning").value);
-
-  const ref = db.collection("departments").doc(dept);
-
-  ref.get().then(doc => {
-    if (doc.data().password !== pass) {
-      alert("Wrong password");
+    if (!doc.exists || doc.data().date !== today()) {
+      ref.set({
+        issuedToken: 0,
+        runningToken: 0,
+        date: today(),
+        password: passwords[d]
+      });
       return;
     }
 
-    ref.update({
-      issuedToken: issued,
-      runningToken: running
-    });
+    issued.innerText = doc.data().issuedToken;
+    running.innerText = doc.data().runningToken;
+
+    if (doc.data().runningToken !== lastRunning) {
+      document.getElementById("notify").play();
+      lastRunning = doc.data().runningToken;
+    }
   });
 }
+
+/* ✏️ UPDATE TOKENS */
+function updateTokens() {
+  const d = department.value;
+  if (password.value !== passwords[d]) {
+    alert("Incorrect password for " + d);
+    return;
+  }
+
+  db.collection("departments").doc(d).update({
+    issuedToken: Number(newIssued.value),
+    runningToken: Number(newRunning.value),
+    date: today()
+  });
+}
+
+applyTheme();
+listen();
 </script>
 
 </body>
