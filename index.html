@@ -1,33 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MedMadad – Token</title>
+<title>MedMadad – Medicine Token</title>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f1f5f9;
+}
+.card{
+  max-width:400px;
+  margin:80px auto;
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  text-align:center;
+}
+button{
+  width:100%;
+  padding:16px;
+  font-size:20px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:10px;
+}
+#result{
+  margin-top:25px;
+  font-size:26px;
+  color:#16a34a;
+}
+</style>
 </head>
+
 <body>
-  <h2>🏥 MedMadad – Medicine Token</h2>
-  <button onclick="getToken()">Get Token</button>
-  <h3 id="result"></h3>
+<div class="card">
+  <h2>🏥 MedMadad</h2>
+  <p>Doctor ke liye token lein</p>
+  <button onclick="getToken()">🎟 GET TOKEN</button>
+  <div id="result"></div>
+</div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, updateDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSy....",   // 👈 YAHAN TUMHARA CONFIG
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSy....",
   authDomain: "smarthospitalqueue.firebaseapp.com",
-  projectId: "smarthospitalqueue",
+  projectId: "smarthospitalqueue"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
 
-window.getToken = async () => {
-  const ref = doc(db, "departments", "medicine");
-  await updateDoc(ref, { currentToken: increment(1) });
-  const snap = await getDoc(ref);
-  document.getElementById("result").innerText =
-    "Your Token Number: " + snap.data().currentToken;
-};
+function getToken(){
+  var ref = db.collection("departments").doc("medicine");
+  ref.update({
+    currentToken: firebase.firestore.FieldValue.increment(1)
+  }).then(()=>{
+    ref.get().then((doc)=>{
+      document.getElementById("result").innerHTML =
+        "Your Token: A-" + doc.data().currentToken;
+    });
+  });
+}
 </script>
 </body>
 </html>
