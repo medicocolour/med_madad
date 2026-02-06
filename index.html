@@ -1,140 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Med Madad – Emergency Medical Help</title>
-<style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fa;color:#111}
-.top-strip{height:6px;background:linear-gradient(to right,#ff9933,#ffffff,#138808)}
-header{padding:20px;text-align:center;background:#0d47a1;color:#fff}
-header h1{margin:0;font-size:26px}
-header p{margin:8px 0 0;font-size:14px}
-
-.container{padding:16px;max-width:480px;margin:auto}
-.card{background:#fff;border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-
-.btn{display:block;width:100%;padding:14px;margin:10px 0;
-border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;text-align:center;text-decoration:none}
-
-.btn-red{background:#d32f2f;color:#fff}
-.btn-green{background:#2e7d32;color:#fff}
-.btn-blue{background:#1565c0;color:#fff}
-.btn-gray{background:#455a64;color:#fff}
-
-input,textarea,select{
-width:100%;padding:10px;margin:6px 0;border-radius:6px;
-border:1px solid #ccc;font-size:14px
-}
-
-.risk-high{background:#ffcdd2;color:#b71c1c;padding:10px;border-radius:6px;font-weight:bold}
-.risk-mid{background:#fff9c4;color:#f57f17;padding:10px;border-radius:6px;font-weight:bold}
-.risk-low{background:#c8e6c9;color:#1b5e20;padding:10px;border-radius:6px;font-weight:bold}
-
-footer{font-size:12px;color:#444;text-align:center;padding:16px}
-</style>
+  <title>MedMadad – Token</title>
 </head>
-
 <body>
+  <h2>🏥 MedMadad – Medicine Token</h2>
+  <button onclick="getToken()">Get Token</button>
+  <h3 id="result"></h3>
 
-<div class="top-strip"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, updateDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<header>
-<h1>Med Madad</h1>
-<p>Emergency-first digital medical assistance</p>
-</header>
+const firebaseConfig = {
+  apiKey: "AIzaSy....",   // 👈 YAHAN TUMHARA CONFIG
+  authDomain: "smarthospitalqueue.firebaseapp.com",
+  projectId: "smarthospitalqueue",
+};
 
-<div class="container">
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<!-- EMERGENCY ACTIONS -->
-<div class="card">
-<a class="btn btn-red" href="tel:108">📞 Call Ambulance (108)</a>
-
-<a class="btn btn-green"
-href="https://wa.me/919771921691?text=Emergency%20help%20needed.%20Please%20respond.">
-💬 WhatsApp Emergency Help
-</a>
-
-<a class="btn btn-blue"
-href="https://www.google.com/maps/search/emergency+hospital+near+me" target="_blank">
-🏥 Find Nearby Emergency Hospitals
-</a>
-</div>
-
-<!-- AI HEALTH ASSIST -->
-<div class="card">
-<h3>🤖 AI Health Assistant</h3>
-<p style="font-size:13px">Emergency urgency assessment only. Not diagnosis.</p>
-
-<input type="number" id="age" placeholder="Age">
-<textarea id="symptom" placeholder="Describe symptoms (e.g. chest pain, breathless)"></textarea>
-<select id="duration">
-<option value="">Duration</option>
-<option value="short">Less than 1 hour</option>
-<option value="medium">1–6 hours</option>
-<option value="long">More than 6 hours</option>
-</select>
-
-<button class="btn btn-gray" onclick="checkRisk()">Check Urgency</button>
-<div id="result"></div>
-</div>
-
-<!-- QUICK EMERGENCY FORM -->
-<div class="card">
-<h3>📝 Quick Emergency Request</h3>
-
-<input id="f_age" placeholder="Age">
-<input id="f_problem" placeholder="Main problem">
-<input id="f_duration" placeholder="Duration">
-<input id="f_location" placeholder="Location (optional)">
-
-<button class="btn btn-green" onclick="sendWhatsApp()">Send via WhatsApp</button>
-</div>
-
-<!-- REVIEWS -->
-<div class="card">
-<h3>⭐ User Feedback</h3>
-<p><b>Amit K. (Patna):</b> Helped us quickly find emergency hospital at night.</p>
-<p><b>Sana R. (Lucknow):</b> WhatsApp guidance saved critical time.</p>
-<p><b>Rahul S. (Delhi):</b> Simple and fast during panic.</p>
-<p style="font-size:12px;color:#666">Names changed for privacy.</p>
-</div>
-
-</div>
-
-<footer>
-<b>Disclaimer:</b> Med Madad does not replace emergency medical services.
-In life-threatening situations, always call <b>108</b> or visit the nearest emergency department.
-</footer>
-
-<script>
-function checkRisk(){
-let s=document.getElementById("symptom").value.toLowerCase();
-let d=document.getElementById("duration").value;
-let r=document.getElementById("result");
-
-if(s.includes("chest")||s.includes("breath")||s.includes("seizure")||s.includes("unconscious")||s.includes("bleeding")){
-r.innerHTML='<div class="risk-high">🔴 HIGH RISK – Call 108 immediately.</div>';
-}
-else if(d==="long"){
-r.innerHTML='<div class="risk-mid">🟡 MODERATE RISK – Visit emergency hospital.</div>';
-}
-else{
-r.innerHTML='<div class="risk-low">🟢 LOW RISK – Monitor symptoms, seek care if worsens.</div>';
-}
-}
-
-function sendWhatsApp(){
-let msg=
-"EMERGENCY REQUEST%0A"+
-"Age: "+document.getElementById("f_age").value+"%0A"+
-"Problem: "+document.getElementById("f_problem").value+"%0A"+
-"Duration: "+document.getElementById("f_duration").value+"%0A"+
-"Location: "+document.getElementById("f_location").value;
-
-window.open("https://wa.me/919771921691?text="+msg,"_blank");
-}
+window.getToken = async () => {
+  const ref = doc(db, "departments", "medicine");
+  await updateDoc(ref, { currentToken: increment(1) });
+  const snap = await getDoc(ref);
+  document.getElementById("result").innerText =
+    "Your Token Number: " + snap.data().currentToken;
+};
 </script>
-
 </body>
 </html>
