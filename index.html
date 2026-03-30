@@ -1,220 +1,273 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<title>MED MADAD | Smart Hospital Queue</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Med Madad | Premium Smart Queue</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            /* Department Themes */
+            --medicine-primary: #059669; --medicine-bg: #f0fdf4;
+            --gynaecology-primary: #9333ea; --gynaecology-bg: #faf5ff;
+            --orthopedic-primary: #2563eb; --orthopedic-bg: #eff6ff;
+            --surgery-primary: #dc2626; --surgery-bg: #fef2f2;
+            --pediatrics-primary: #db2777; --pediatrics-bg: #fdf2f8;
 
-<!-- 🔊 Hospital Sound -->
-<audio id="notify">
-  <source src="https://actions.google.com/sounds/v1/alarms/soft_bell.ogg" type="audio/ogg">
-</audio>
+            /* Dynamic Base */
+            --current-primary: #0f172a;
+            --current-bg: #f8fafc;
+            --white: #ffffff;
+            --dark: #0f172a;
+        }
 
-<style>
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  color: #fff;
-  text-align: center;
-  transition: background 0.5s;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-header {
-  padding: 20px;
-}
+        body {
+            background-color: var(--current-bg);
+            transition: all 0.5s ease;
+            padding-bottom: 120px;
+        }
 
-.logo {
-  font-size: 30px;
-  font-weight: bold;
-}
+        /* --- 🏥 Premium Header --- */
+        header {
+            background: var(--white);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--current-primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: border-color 0.5s ease;
+        }
 
-.tagline {
-  font-size: 14px;
-  opacity: 0.9;
-}
+        .logo {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: var(--dark);
+        }
 
-.container {
-  max-width: 420px;
-  margin: auto;
-  background: #ffffff;
-  color: #111;
-  border-radius: 18px;
-  padding: 20px;
-}
+        .logo span { color: var(--current-primary); transition: color 0.5s ease; }
 
-select, input, button {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
+        /* ✨ Smart Care Gradient Text */
+        .tagline {
+            font-size: 13px;
+            font-weight: 800;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #f97316, #2563eb, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
 
-.card {
-  background: #f1f5f9;
-  border-radius: 14px;
-  padding: 16px;
-  margin: 12px 0;
-}
+        /* --- 📱 Main UI --- */
+        .main-container { max-width: 480px; margin: 0 auto; padding: 20px; }
 
-.token {
-  font-size: 46px;
-  font-weight: bold;
-}
+        .pro-card {
+            background: var(--white);
+            border-radius: 32px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            margin-bottom: 25px;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
 
-button {
-  background: #020617;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
+        .section-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: block;
+        }
 
-button:hover {
-  opacity: 0.9;
-}
+        select {
+            width: 100%; padding: 20px; border-radius: 20px;
+            border: 2px solid #f1f5f9; background: #f8fafc;
+            font-size: 18px; font-weight: 700; color: var(--dark);
+            cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 20px center; background-size: 20px;
+            margin-bottom: 30px;
+        }
 
-footer {
-  margin-top: 20px;
-  font-size: 12px;
-  opacity: 0.85;
-}
-</style>
+        .queue-display { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .counter-item {
+            background: #f8fafc; padding: 30px 10px; border-radius: 24px; text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .counter-item.active-now {
+            background: var(--current-bg);
+            border: 2.5px solid var(--current-primary);
+        }
+
+        .val-num { font-size: 58px; font-weight: 800; color: var(--dark); letter-spacing: -3px; }
+        .val-num.glow { color: var(--current-primary); transition: color 0.5s ease; }
+
+        /* --- 🩺 Doctor Update Section --- */
+        .dr-heading { 
+            color: var(--current-primary); font-size: 14px; font-weight: 800; 
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+        }
+
+        input {
+            width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 18px;
+            border: 2px solid #f1f5f9; font-size: 16px; font-weight: 600;
+        }
+
+        input:focus { border-color: var(--current-primary); outline: none; }
+
+        .btn-update {
+            width: 100%; padding: 20px; background: var(--dark); color: #fff;
+            border: none; border-radius: 20px; font-weight: 800; font-size: 17px;
+            cursor: pointer; transition: 0.3s; margin-top: 10px;
+        }
+
+        .btn-update:hover { background: var(--current-primary); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* --- 🎯 Modern Navigation --- */
+        nav {
+            position: fixed; bottom: 0; width: 100%; background: var(--white);
+            display: flex; justify-content: space-around; padding: 22px 0;
+            border-top: 1px solid #f1f5f9; box-shadow: 0 -10px 40px rgba(0,0,0,0.05); z-index: 1000;
+        }
+
+        .nav-btn {
+            text-decoration: none; color: #94a3b8; font-size: 10px; font-weight: 800;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+
+        .nav-btn.active { color: var(--current-primary); }
+        .nav-btn i { font-size: 26px; }
+        .nav-btn.wa { color: #10b981; }
+
+    </style>
 </head>
-
-<body id="body">
+<body id="page-body">
 
 <header>
-  <div class="logo">🏥 MED MADAD</div>
-  <div class="tagline">Smart care • Less waiting • Better health</div>
+    <div class="logo">Med <span>Madad</span></div>
+    <div class="tagline">Smart Care • Less Waiting • Live Updates</div>
 </header>
 
-<div class="container">
+<div class="main-container">
+    
+    <div class="pro-card">
+        <span class="section-title">Select Department</span>
+        <select id="dept" onchange="updateUI()">
+            <option value="medicine">General Medicine</option>
+            <option value="gynaecology">Gynaecology</option>
+            <option value="orthopedic">Orthopedic</option>
+            <option value="surgery">Surgery</option>
+            <option value="pediatrics">Pediatrics</option>
+        </select>
 
-<select id="department" onchange="applyTheme(); listen();">
-  <option value="medicine">Medicine</option>
-  <option value="gynaecology">Gynaecology</option>
-  <option value="orthopedic">Orthopedic</option>
-  <option value="surgery">Surgery</option>
-  <option value="pediatrics">Pediatrics</option>
-</select>
+        <div class="queue-display">
+            <div class="counter-item">
+                <span class="section-title">Issued</span>
+                <div class="val-num" id="issued">0</div>
+            </div>
+            <div class="counter-item active-now">
+                <span class="section-title">Serving</span>
+                <div class="val-num glow" id="serving">0</div>
+            </div>
+        </div>
+    </div>
 
-<div class="card">
-  Issued Token
-  <div class="token" id="issued">0</div>
+    <div class="pro-card">
+        <div class="dr-heading"><i class="fa-solid fa-stethoscope"></i> DOCTOR'S UPDATE PORTAL</div>
+        <input type="password" id="pass" placeholder="Authorization Key">
+        <div style="display: flex; gap: 12px;">
+            <input type="number" id="setIss" placeholder="Set Issued">
+            <input type="number" id="setServ" placeholder="Set Serving">
+        </div>
+        <button class="btn-update" onclick="pushUpdates()">UPDATE DASHBOARD</button>
+    </div>
+
 </div>
 
-<div class="card">
-  Now Serving
-  <div class="token" id="running">0</div>
-</div>
+<nav>
+    <a href="#" class="nav-btn active"><i class="fa-solid fa-bolt-lightning"></i>LIVE DASH</a>
+    <a href="https://wa.me/919852558603?text=Hi%20Med%20Madad,%20I%20need%20assistance." class="nav-btn wa" target="_blank"><i class="fa-brands fa-whatsapp"></i>WHATSAPP</a>
+    <a href="https://www.google.com/maps/search/hospitals+near+me" class="nav-btn" target="_blank"><i class="fa-solid fa-map-location-dot"></i>NEARBY</a>
+    <a href="tel:9852558603" class="nav-btn"><i class="fa-solid fa-headset"></i>SUPPORT</a>
+</nav>
 
-<input type="password" id="password" placeholder="Doctor password">
-<input type="number" id="newIssued" placeholder="New issued token">
-<input type="number" id="newRunning" placeholder="New running token">
-
-<button onclick="updateTokens()">Update Tokens</button>
-
-</div>
-
-<footer>
-⚠️ For information only. Please wait for your turn.<br>
-Created by Raj
-</footer>
+<audio id="bell" src="https://actions.google.com/sounds/v1/alarms/soft_bell.ogg"></audio>
 
 <script>
-/* 🔥 FIREBASE CONFIG */
-firebase.initializeApp({
-  apiKey: "YOUR_API_KEY",
-  authDomain: "medmadad-2a807.firebaseapp.com",
-  projectId: "medmadad-2a807"
-});
+    // --- FIREBASE CONFIG (अपनी KEY यहाँ पेस्ट करें) ---
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "medmadad-2a807.firebaseapp.com",
+        projectId: "medmadad-2a807"
+    };
 
-const db = firebase.firestore();
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-/* 🔐 PASSWORDS (FIXED) */
-const passwords = {
-  medicine: "1111",
-  gynaecology: "4444",
-  orthopedic: "2222",
-  surgery: "3333",
-  pediatrics: "5555"
-};
+    let liveSync = null;
+    let oldNum = 0;
 
-/* 🎨 CALM MEDICAL COLORS */
-const themes = {
-  medicine: "#0f766e",
-  gynaecology: "#9d174d",
-  orthopedic: "#1e3a8a",
-  surgery: "#7f1d1d",
-  pediatrics: "#047857"
-};
+    // --- Dynamic Theme & Real-time Sync ---
+    function updateUI() {
+        const d = document.getElementById("dept").value;
+        const root = document.documentElement;
 
-let lastRunning = 0;
-let unsubscribe = null;
+        // Apply Dynamic Colors
+        const primary = getComputedStyle(root).getPropertyValue(`--${d}-primary`).trim();
+        const bg = getComputedStyle(root).getPropertyValue(`--${d}-bg`).trim();
+        root.style.setProperty('--current-primary', primary);
+        root.style.setProperty('--current-bg', bg);
 
-/* 📅 TODAY */
-function today() {
-  return new Date().toISOString().slice(0,10);
-}
+        // Real-time Sync
+        if (liveSync) liveSync(); 
+        liveSync = db.collection("departments").doc(d).onSnapshot(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById("issued").innerText = data.issuedToken || 0;
+                document.getElementById("serving").innerText = data.runningToken || 0;
 
-/* 🎨 THEME APPLY */
-function applyTheme() {
-  const d = department.value;
-  body.style.background =
-    `linear-gradient(135deg, ${themes[d]}, #020617)`;
-}
-
-/* 📡 LIVE LISTENER + DAILY RESET */
-function listen() {
-  const d = department.value;
-
-  if (unsubscribe) unsubscribe();
-
-  const ref = db.collection("departments").doc(d);
-  unsubscribe = ref.onSnapshot(doc => {
-    if (!doc.exists || doc.data().date !== today()) {
-      ref.set({
-        issuedToken: 0,
-        runningToken: 0,
-        date: today(),
-        password: passwords[d]
-      });
-      return;
+                if (data.runningToken !== oldNum && oldNum !== 0) {
+                    document.getElementById("bell").play().catch(() => {});
+                }
+                oldNum = data.runningToken;
+            }
+        });
     }
 
-    issued.innerText = doc.data().issuedToken;
-    running.innerText = doc.data().runningToken;
+    // --- Doctor Logic ---
+    const keys = { medicine: "1111", gynaecology: "4444", orthopedic: "2222", surgery: "3333", pediatrics: "5555" };
 
-    if (doc.data().runningToken !== lastRunning) {
-      document.getElementById("notify").play();
-      lastRunning = doc.data().runningToken;
+    function pushUpdates() {
+        const d = document.getElementById("dept").value;
+        const p = document.getElementById("pass").value;
+        const ni = document.getElementById("setIss").value;
+        const ns = document.getElementById("setServ").value;
+
+        if (p !== keys[d]) return alert("Access Denied: Wrong Key");
+        if (!ni || !ns) return alert("Please fill both counts");
+
+        db.collection("departments").doc(d).set({
+            issuedToken: Number(ni),
+            runningToken: Number(ns),
+            date: new Date().toISOString().slice(0, 10)
+        }, { merge: true }).then(() => {
+            alert("Dashboard Updated!");
+            document.getElementById("pass").value = "";
+        });
     }
-  });
-}
 
-/* ✏️ UPDATE TOKENS */
-function updateTokens() {
-  const d = department.value;
-  if (password.value !== passwords[d]) {
-    alert("Incorrect password for " + d);
-    return;
-  }
-
-  db.collection("departments").doc(d).update({
-    issuedToken: Number(newIssued.value),
-    runningToken: Number(newRunning.value),
-    date: today()
-  });
-}
-
-applyTheme();
-listen();
+    // Launch initial state
+    updateUI();
 </script>
-
 </body>
 </html>
