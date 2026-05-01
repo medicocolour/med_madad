@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Med Madad | Premium Home Care Patna</title>
+    <title>Med Madad | Home Care Patna</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +18,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--dark); padding-bottom: 40px; }
+        body { background-color: var(--bg); color: var(--dark); padding-bottom: 20px; }
 
         header {
             background: var(--vibrant-grad);
@@ -30,7 +30,7 @@
         }
 
         .logo { font-size: 46px; font-weight: 800; letter-spacing: -2.5px; color: white; line-height: 1; }
-        .logo span { color: var(--gold); }
+        .logo span { color: var(--gold); text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
         .tagline-box {
             margin-top: 15px; display: inline-block; background: rgba(255, 255, 255, 0.1);
@@ -62,35 +62,34 @@
 
         .action-area { margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .btn { padding: 18px; border-radius: 20px; text-align: center; text-decoration: none; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-wa { background: #10b981; color: white; }
+        .btn-wa { background: #10b981; color: white; box-shadow: 0 10px 20px rgba(16,185,129,0.2); }
         .btn-call { background: var(--dark); color: white; }
 
-        /* --- Centered Legal Notice --- */
-        .legal-notice {
-            background: #fff1f2; border-radius: 24px; padding: 25px;
-            margin-top: 30px; border: 2px solid #ffe4e6; cursor: pointer;
-            text-align: center; /* Poora content center */
+        /* ID-Style Feedback Section */
+        .feedback-section { margin-top: 40px; }
+        .feedback-title { font-size: 14px; font-weight: 900; text-align: center; color: var(--primary); text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1.5px; }
+        
+        .id-card { 
+            background: white; border-radius: 25px; padding: 20px; margin-bottom: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.04);
         }
-        .legal-header { 
-            display: flex; justify-content: center; align-items: center;
-            color: #be123c; font-weight: 900; font-size: 16px; text-transform: uppercase;
-            gap: 10px;
+        .id-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .id-avatar { 
+            width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; 
+            display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800;
         }
-        .legal-summary { 
-            font-size: 12px; color: #be123c; font-weight: 800; margin-top: 10px; 
-            text-transform: uppercase; line-height: 1.5;
-        }
-        .legal-content { 
-            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
-            font-size: 11px; color: #991b1b; font-weight: 700; text-align: center;
-            line-height: 1.6;
-        }
-        .legal-notice.open .legal-content { 
-            max-height: 500px; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #fda4af;
-        }
-        .legal-notice i { transition: 0.3s; }
-        .legal-notice.open i { transform: rotate(180deg); }
+        .id-info { display: flex; flex-direction: column; }
+        .id-name { font-size: 13px; font-weight: 800; color: var(--dark); }
+        .id-handle { font-size: 10px; color: #94a3b8; font-weight: 600; }
+        
+        .fb-text { font-size: 12px; font-weight: 600; color: #475569; line-height: 1.6; }
 
+        /* Centered Legal Notice */
+        .legal-notice { background: #fff1f2; border-radius: 24px; padding: 25px; margin-top: 35px; border: 2px solid #ffe4e6; cursor: pointer; text-align: center; }
+        .legal-header { display: flex; justify-content: center; align-items: center; color: #be123c; font-weight: 900; font-size: 16px; text-transform: uppercase; gap: 10px; }
+        .legal-summary { font-size: 12px; color: #be123c; font-weight: 800; margin-top: 10px; text-transform: uppercase; line-height: 1.5; }
+        .legal-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; font-size: 11px; color: #991b1b; font-weight: 700; text-align: center; }
+        .legal-notice.open .legal-content { max-height: 500px; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #fda4af; }
     </style>
 </head>
 <body>
@@ -107,26 +106,17 @@
     
     <a href="https://wa.me/917547872975?text=Doctor Home Visit" class="feature-card">
         <div class="f-icon blue"><i class="fa-solid fa-user-doctor"></i></div>
-        <div class="f-text">
-            <h3><span class="highlight-b">D</span>octor Home Visit</h3>
-            <p>QUALIFIED MD/MBBS PROFESSIONALS</p>
-        </div>
+        <div class="f-text"><h3><span class="highlight-b">D</span>octor Home Visit</h3><p>QUALIFIED MD/MBBS PROFESSIONALS</p></div>
     </a>
 
     <a href="https://wa.me/917547872975?text=Physiotherapy" class="feature-card">
         <div class="f-icon purple"><i class="fa-solid fa-house-medical-circle-check"></i></div>
-        <div class="f-text">
-            <h3><span class="highlight-p">B</span>est Physiotherapy</h3>
-            <p>EXPERT RECOVERY CARE ACROSS PATNA</p>
-        </div>
+        <div class="f-text"><h3><span class="highlight-p">B</span>est Physiotherapy</h3><p>EXPERT RECOVERY CARE ACROSS PATNA</p></div>
     </a>
 
     <a href="https://wa.me/917547872975?text=Sample Collection" class="feature-card">
         <div class="f-icon green"><i class="fa-solid fa-vial-circle-check"></i></div>
-        <div class="f-text">
-            <h3><span class="highlight-s">S</span>ample Collection</h3>
-            <p>HYGIENIC LAB TESTS FROM HOME</p>
-        </div>
+        <div class="f-text"><h3><span class="highlight-s">S</span>ample Collection</h3><p>HYGIENIC LAB TESTS FROM HOME</p></div>
     </a>
 
     <div class="action-area">
@@ -134,28 +124,55 @@
         <a href="tel:7547872975" class="btn btn-call"><i class="fa-solid fa-phone"></i> CALL NOW</a>
     </div>
 
+    <div class="feedback-section">
+        <h4 class="feedback-title">Patient Reviews</h4>
+        
+        <div class="id-card">
+            <div class="id-header">
+                <div class="id-avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="id-info">
+                    <span class="id-name">Ranjan Yadav</span>
+                    <span class="id-handle">Kankarbagh, Patna</span>
+                </div>
+            </div>
+            <p class="fb-text">"Garmi aur bheed mein clinic jana bahut mushkil tha. Med Madad ke doctor ghar aaye aur bahut sukoon se checkup kiya. Patna mein aisi service ki bahut zaroorat thi."</p>
+        </div>
+
+        <div class="id-card">
+            <div class="id-header">
+                <div class="id-avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="id-info">
+                    <span class="id-name">Suman Pathak</span>
+                    <span class="id-handle">Boring Road, Patna</span>
+                </div>
+            </div>
+            <p class="fb-text">"Mummy ko knee pain ke liye physio ki zaroorat thi. Daily aate hain aur ab mummy kafi better feel kar rahi hain. Professionals bahut tameez wale hain."</p>
+        </div>
+
+        <div class="id-card">
+            <div class="id-header">
+                <div class="id-avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="id-info">
+                    <span class="id-name">Vikas Jha</span>
+                    <span class="id-handle">Rajendra Nagar, Patna</span>
+                </div>
+            </div>
+            <p class="fb-text">"Blood test ke liye subah-subah line mein nahi lagna pada. Ghar se sample gaya aur dopahar tak report WhatsApp pe aa gayi. Bahut fast service hai."</p>
+        </div>
+    </div>
+
     <div class="legal-notice" onclick="toggleLegal()">
-        <div class="legal-header">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>LEGAL WARNING</span>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-        <div class="legal-summary">
-            NOT FOR EMERGENCY CASES.<br>HOME CARE SERVICE ONLY.
-        </div>
+        <div class="legal-header"><i class="fa-solid fa-triangle-exclamation"></i><span>LEGAL WARNING</span><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="legal-summary">NOT FOR EMERGENCY CASES.<br>HOME CARE SERVICE ONLY.</div>
         <div class="legal-content">
-            <p>MED MADAD IS A SCHEDULED HOME CARE PLATFORM EXCLUSIVELY IN PATNA. WE DO NOT PROVIDE ANY EMERGENCY OR ACCIDENT SERVICES. IN CASE OF CRITICAL ILLNESS, LIFE-THREATENING SITUATIONS, OR ACCIDENTS, IMMEDIATELY VISIT THE NEAREST HOSPITAL.</p>
-            <br>
-            <p>THIS DIGITAL PLATFORM AND ITS DEVELOPMENT PARTNERS ARE NOT RESPONSIBLE FOR ANY DELAYS, MEDICAL OUTCOMES, OR EMERGENCY FAILURES. ALL SERVICES ARE PROVIDED ON A PRE-BOOKING BASIS. BY USING THIS SITE, YOU ACCEPT ALL TERMS AND CONDITIONS VOLUNTARILY.</p>
+            <p>MED MADAD IS A SCHEDULED HOME CARE PLATFORM EXCLUSIVELY IN PATNA. WE DO NOT PROVIDE EMERGENCY OR ACCIDENT SERVICES. IN CASE OF CRITICAL ILLNESS, VISIT THE NEAREST HOSPITAL.</p>
         </div>
     </div>
 
 </div>
 
 <script>
-    function toggleLegal() {
-        document.querySelector('.legal-notice').classList.toggle('open');
-    }
+    function toggleLegal() { document.querySelector('.legal-notice').classList.toggle('open'); }
 </script>
 
 </body>
